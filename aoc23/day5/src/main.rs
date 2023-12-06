@@ -58,7 +58,7 @@ fn main() {
 }
 
 fn start_job(job: SeedRange, rules: Vec<RuleChain>) -> u64 {
-    let subjobs = create_subjobs(job, 6);
+    let subjobs = create_subjobs(job, 12); // I have 12 logical processors on my machine
     
     println!("Starting job");
     let mut handles = vec![];
