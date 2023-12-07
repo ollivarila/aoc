@@ -8,18 +8,19 @@ use roots::find_roots_quadratic;
 
 fn main() {
     // Dunno what went wrong with this one but did it with a regular calculator
+    // Nvm just had to use f64 instead of f32 ...
     let input = include_str!("../../input.txt");
     let solution = solution(input);
     println!("{}", solution);
 }
 
-fn parse(input: &str) -> (i32, i32) {
+fn parse(input: &str) -> (i64, i64) {
     let (r, times) = parse_time(input).unwrap();
     let (_, distances) = parse_distance(r).unwrap();
     let s_times: Vec<String> = times.iter().map(|n| n.to_string()).collect();
-    let time: i32 = s_times.join("").parse().unwrap();
+    let time: i64 = s_times.join("").parse().unwrap();
     let s_distances: Vec<String> = distances.iter().map(|n| n.to_string()).collect();
-    let distance: i32 = s_distances.join("").parse().unwrap();
+    let distance: i64 = s_distances.join("").parse().unwrap();
     (time, distance)
 }
 
@@ -36,13 +37,11 @@ fn parse_distance(input: &str) -> IResult<&str, Vec<u32>> {
 
 fn solution(input: &str) -> usize {
     let (time, distance) = parse(input);
-    dbg!(&time, &distance);
     let result = solve(time, distance);
-    dbg!(&result);
-    result.len()
+    result.count()
 }
 
-fn solve(time: i32, distance: i32) -> Range<i32> {
+fn solve(time: i64, distance: i64) -> Range<i64> {
     let a = -1; // Always constant
     let b = time; // Total time
     let c = - distance; // Distance
@@ -50,20 +49,18 @@ fn solve(time: i32, distance: i32) -> Range<i32> {
     ans.0..ans.1 + 1
 }
 
-fn solve_quadratic(a: i32, b: i32, c: i32) -> (i32, i32) {
-    dbg!(a, b as f32, c as f32);
-    let ans= find_roots_quadratic(a as f32, b as f32, c as f32);
+fn solve_quadratic(a: i64, b: i64, c: i64) -> (i64, i64) {
+    let ans= find_roots_quadratic(a as f64, b as f64, c as f64);
     match ans {
         roots::Roots::Two(roots) => convert_roots(roots),
         _ => panic!("Did not find two roots")
     }
 }
 
-fn convert_roots(roots: [f32; 2]) -> (i32, i32) {
+fn convert_roots(roots: [f64; 2]) -> (i64, i64) {
     // This counts for roots being exactly something
-    let first = roots[0].floor() as i32 + 1;
-    let second = roots[1].ceil() as i32 - 1;
-    dbg!(first, second);
+    let first = roots[0].floor() as i64 + 1;
+    let second = roots[1].ceil() as i64 - 1;
     (first, second)
 }
 
