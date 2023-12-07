@@ -7,15 +7,20 @@ use nom::character::complete::{u32, newline, multispace1};
 use roots::find_roots_quadratic;
 
 fn main() {
+    // Dunno what went wrong with this one but did it with a regular calculator
     let input = include_str!("../../input.txt");
     let solution = solution(input);
     println!("{}", solution);
 }
 
-fn parse(input: &str) -> (Vec<u32>, Vec<u32>) {
+fn parse(input: &str) -> (i32, i32) {
     let (r, times) = parse_time(input).unwrap();
     let (_, distances) = parse_distance(r).unwrap();
-    (times, distances)
+    let s_times: Vec<String> = times.iter().map(|n| n.to_string()).collect();
+    let time: i32 = s_times.join("").parse().unwrap();
+    let s_distances: Vec<String> = distances.iter().map(|n| n.to_string()).collect();
+    let distance: i32 = s_distances.join("").parse().unwrap();
+    (time, distance)
 }
 
 fn parse_time(input: &str) -> IResult<&str, Vec<u32>> {
@@ -30,16 +35,11 @@ fn parse_distance(input: &str) -> IResult<&str, Vec<u32>> {
 }
 
 fn solution(input: &str) -> usize {
-    let (times, distances) = parse(input);
-    let iter = times.iter().zip(distances.iter());
-    
-    let mut num_ways = vec![];
-    for (time, distance) in iter {
-        let range = solve(time.clone() as i32, distance.clone() as i32);
-        let len = range.len();
-        num_ways.push(len);
-    }
-    num_ways.iter().product()
+    let (time, distance) = parse(input);
+    dbg!(&time, &distance);
+    let result = solve(time, distance);
+    dbg!(&result);
+    result.len()
 }
 
 fn solve(time: i32, distance: i32) -> Range<i32> {
@@ -51,6 +51,7 @@ fn solve(time: i32, distance: i32) -> Range<i32> {
 }
 
 fn solve_quadratic(a: i32, b: i32, c: i32) -> (i32, i32) {
+    dbg!(a, b as f32, c as f32);
     let ans= find_roots_quadratic(a as f32, b as f32, c as f32);
     match ans {
         roots::Roots::Two(roots) => convert_roots(roots),
@@ -62,6 +63,7 @@ fn convert_roots(roots: [f32; 2]) -> (i32, i32) {
     // This counts for roots being exactly something
     let first = roots[0].floor() as i32 + 1;
     let second = roots[1].ceil() as i32 - 1;
+    dbg!(first, second);
     (first, second)
 }
 
@@ -75,7 +77,7 @@ pub mod tests {
         let input = "Time:      7  15   30
 Distance:  9  40  200";
         let answer = solution(input);
-        assert_eq!(answer, 288);
+        assert_eq!(answer, 71503);
     }
     
 }
