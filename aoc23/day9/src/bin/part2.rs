@@ -7,7 +7,7 @@ fn main() {
 fn solution(input: &str) -> i64 {
     let parsed = parse(input);
     let derived = derive_all(parsed);
-    derived.iter().map(extrapolate_end).sum()
+    derived.iter().map(extrapolate_start).sum()
 }
 
 fn parse(input: &str) -> Vec<Vec<i64>> {
@@ -23,7 +23,7 @@ fn parse(input: &str) -> Vec<Vec<i64>> {
         .collect()
 }
 
-fn extrapolate_end(input: &DerivationResult) -> i64 {
+fn extrapolate_start(input: &DerivationResult) -> i64 {
     let val = &input.value;
     let mut prev = 0;
     for row in val.iter().rev() {
