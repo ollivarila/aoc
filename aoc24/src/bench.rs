@@ -18,8 +18,6 @@ impl<T> Bench<T::SolutionOutput> for T
 where
     T: Solution + ?Sized,
 {
-    // TODO: Progress bar that incements on each iteration
-    // indicatif has some kind of Iterator progress bar ttrait thingy
     fn run_bench(&self, config: &BenchConfig, bar: &ProgressBar) -> Report<T::SolutionOutput> {
         let mut all_durations = Vec::with_capacity(config.iterations);
         let mut output = None;

@@ -1,4 +1,4 @@
-use indicatif::{ProgressBar, ProgressIterator, ProgressStyle};
+use indicatif::{ProgressBar, ProgressStyle};
 use owo_colors::OwoColorize;
 
 use crate::bench::{Bench, BenchConfig};

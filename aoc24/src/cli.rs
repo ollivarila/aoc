@@ -26,7 +26,7 @@ pub fn run(args: Args) {
     let iterations = args.iterations;
     let config = BenchConfig::new(iterations);
     prompt();
-    if let None = day {
+    if day.is_none() {
         return run_all(&config);
     }
 
@@ -41,6 +41,6 @@ pub fn run(args: Args) {
 }
 
 fn run_all(config: &BenchConfig) {
-    day_1::Part1.display_solution(&config);
-    day_1::Part2.display_solution(&config);
+    day_1::Part1.display_solution(config);
+    day_1::Part2.display_solution(config);
 }
