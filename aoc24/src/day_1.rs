@@ -2,7 +2,7 @@ use crate::Solution;
 use anyhow::Context;
 use std::collections::HashMap;
 
-const INPUT: &str = include_str!("input.txt");
+const INPUT: &str = include_str!("../inputs/day1_input.txt");
 
 pub struct Part1;
 
@@ -94,12 +94,12 @@ mod should {
 ";
 
     #[test]
-    fn compute_p1_example_solution() {
+    fn compute_p1_example() {
         assert_eq!(Part1.solution(EXAMPLE), 11);
     }
 
     #[test]
-    fn compute_p2_example_solution() {
+    fn compute_p2_example() {
         assert_eq!(Part2.solution(EXAMPLE), 31)
     }
 }
