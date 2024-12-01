@@ -1,7 +1,7 @@
 use owo_colors::OwoColorize;
 
 use crate::bench::{Bench, BenchConfig};
-use std::{fmt::Display, time::Duration};
+use std::{fmt::Display, io::Write, time::Duration};
 
 pub trait Solution {
     const FOR: &'static str;
@@ -12,11 +12,15 @@ pub trait Solution {
     where
         Self::SolutionOutput: Display,
     {
+        let for_italic = Self::FOR;
+        let day_part = for_italic.blue();
+
+        print!("\tRunning {day_part}...\r");
+        std::io::stdout().flush().unwrap();
+
         let report = self.run_bench(config);
         let solution_bold = "Solution".bold();
         let solution = solution_bold.purple();
-        let for_italic = Self::FOR;
-        let day_part = for_italic.blue();
         let result = report.output.bright_green();
 
         let time = time_taken(report.took);
