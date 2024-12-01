@@ -1,5 +1,7 @@
 use std::time::{Duration, Instant};
 
+use indicatif::ProgressBar;
+
 use crate::solution::Solution;
 
 #[derive(Debug, Clone)]
@@ -9,14 +11,16 @@ pub struct Report<T> {
 }
 
 pub trait Bench<T> {
-    fn run_bench(&self, config: &BenchConfig) -> Report<T>;
+    fn run_bench(&self, config: &BenchConfig, bar: &ProgressBar) -> Report<T>;
 }
 
 impl<T> Bench<T::SolutionOutput> for T
 where
     T: Solution + ?Sized,
 {
-    fn run_bench(&self, config: &BenchConfig) -> Report<T::SolutionOutput> {
+    // TODO: Progress bar that incements on each iteration
+    // indicatif has some kind of Iterator progress bar ttrait thingy
+    fn run_bench(&self, config: &BenchConfig, bar: &ProgressBar) -> Report<T::SolutionOutput> {
         let mut all_durations = Vec::with_capacity(config.iterations);
         let mut output = None;
         for _ in 0..config.iterations {
@@ -25,9 +29,12 @@ where
             let after = Instant::now();
             let took = after - start;
             all_durations.push(took);
+            bar.inc(1);
         }
 
         let took = all_durations.iter().sum::<Duration>() / config.iterations as u32;
+
+        bar.set_position(config.iterations as u64);
 
         Report {
             took,
@@ -37,7 +44,7 @@ where
 }
 
 pub struct BenchConfig {
-    iterations: usize,
+    pub iterations: usize,
 }
 
 impl BenchConfig {

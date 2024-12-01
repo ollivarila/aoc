@@ -1,4 +1,4 @@
-use indicatif::{ProgressBar, ProgressStyle};
+use indicatif::{ProgressBar, ProgressIterator, ProgressStyle};
 use owo_colors::OwoColorize;
 
 use crate::bench::{Bench, BenchConfig};
@@ -16,11 +16,16 @@ pub trait Solution {
         let for_italic = Self::FOR;
         let day_part = for_italic.blue();
 
-        let bar = ProgressBar::new_spinner();
-        bar.set_message(format!("\tRunning {day_part}"));
-        bar.enable_steady_tick(Duration::from_millis(100));
+        let bar = ProgressBar::new(config.iterations as u64);
+        let style = ProgressStyle::default_bar()
+            .template("\t{msg} [{bar:40.cyan/blue}] {pos}/{len} (eta {eta})")
+            .unwrap()
+            .progress_chars("=> ");
 
-        let report = self.run_bench(config);
+        bar.set_style(style);
+        bar.set_message(format!("Running {day_part}"));
+
+        let report = self.run_bench(config, &bar);
         let solution_bold = "Solution".bold();
         let solution = solution_bold.purple();
         let result = report.output.bright_green();
@@ -30,6 +35,7 @@ pub trait Solution {
         let time_bold = time.bold();
 
         bar.finish_and_clear();
+
         println!("\t{solution} for {day_part}: {result} took {time_bold}\n")
     }
 }
