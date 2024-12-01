@@ -45,7 +45,7 @@ impl Solution for Part2 {
     }
 }
 
-pub fn parse_input(input: &str) -> (Vec<i64>, Vec<i64>) {
+fn parse_input(input: &str) -> (Vec<i64>, Vec<i64>) {
     let mut left = vec![];
     let mut right = vec![];
     for line in input.lines() {
