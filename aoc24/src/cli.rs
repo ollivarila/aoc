@@ -1,4 +1,4 @@
-use crate::{day_1, BenchConfig, Solution};
+use crate::{BenchConfig, Solution};
 use clap::Parser;
 use owo_colors::OwoColorize;
 
@@ -21,6 +21,13 @@ fn prompt() {
     println!("\n\t{content}\n");
 }
 
+macro_rules! day {
+    ($mod:tt, $config:expr) => {{
+        crate::$mod::Part1.display_solution(&$config);
+        crate::$mod::Part2.display_solution(&$config);
+    }};
+}
+
 pub fn run(args: Args) {
     let day = args.day;
     let iterations = args.iterations;
@@ -31,16 +38,14 @@ pub fn run(args: Args) {
     }
 
     match day.unwrap() {
-        1 => {
-            day_1::Part1.display_solution(&config);
-            day_1::Part2.display_solution(&config);
-        }
+        1 => day!(day_1, config),
+        2 => day!(day_2, config),
         n if n > 24 => panic!("There are only 24 days in aoc?"),
         n => unimplemented!("Day {n}"),
     }
 }
 
 fn run_all(config: &BenchConfig) {
-    day_1::Part1.display_solution(config);
-    day_1::Part2.display_solution(config);
+    day!(day_1, config);
+    day!(day_2, config);
 }
