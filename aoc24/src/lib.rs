@@ -7,3 +7,4 @@ pub(crate) use solution::Solution;
 
 mod day_1;
 mod day_2;
+mod day_3;
