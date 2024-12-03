@@ -16,7 +16,7 @@ impl Solution for Part1 {
 
 #[derive(Debug)]
 struct MulParser<'a> {
-    input: &'a str,
+    rest: &'a str,
     mul_mode: MulMode,
 }
 
@@ -32,32 +32,26 @@ impl Iterator for MulParser<'_> {
 
     fn next(&mut self) -> Option<Self::Item> {
         while let Some(c) = self.peek() {
-            if c == 'm' {
-                let maybe_mul = self.mul();
-                if maybe_mul.is_some() {
-                    if matches!(self.mul_mode, MulMode::Do | MulMode::Disabled) {
+            match c {
+                'm' => {
+                    let maybe_mul = self.mul();
+                    if matches!(self.mul_mode, MulMode::Do | MulMode::Disabled if maybe_mul.is_some())
+                    {
                         return maybe_mul;
                     }
                 }
-                continue;
-            }
-            if c == 'd' {
-                if self.mul_mode == MulMode::Disabled {
-                    self.advance_n(1);
-                    continue;
-                }
+                'd' => {
+                    if self.mul_mode == MulMode::Disabled {
+                        self.advance_n(1);
+                        continue;
+                    }
 
-                match self.mode() {
-                    Some(next) => {
+                    if let Some(next) = self.mode() {
                         self.mul_mode = next;
-                        continue;
-                    }
-                    None => {
-                        continue;
                     }
                 }
+                _ => self.advance_n(c.len_utf8()),
             }
-            self.advance_n(c.len_utf8());
         }
 
         None
@@ -118,7 +112,7 @@ impl MulParser<'_> {
     }
 
     fn peek(&self) -> Option<char> {
-        self.input.chars().next()
+        self.rest.chars().next()
     }
 
     fn ensure(&mut self, what: char) -> Option<()> {
@@ -132,19 +126,19 @@ impl MulParser<'_> {
     }
 
     fn advance_n(&mut self, bytes: usize) {
-        self.input = &self.input[bytes..];
+        self.rest = &self.rest[bytes..];
     }
 
     fn new<'a>(input: &'a str) -> MulParser<'a> {
         MulParser {
-            input,
+            rest: input,
             mul_mode: MulMode::Do,
         }
     }
 
     fn pt1<'a>(input: &'a str) -> MulParser<'a> {
         MulParser {
-            input,
+            rest: input,
             mul_mode: MulMode::Disabled,
         }
     }
