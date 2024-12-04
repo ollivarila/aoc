@@ -41,6 +41,7 @@ pub fn run(args: Args) {
         1 => day!(day_1, config),
         2 => day!(day_2, config),
         3 => day!(day_3, config),
+        4 => day!(day_4, config),
         n if n > 24 => panic!("There are only 24 days in aoc?"),
         n => unimplemented!("Day {n}"),
     }
@@ -50,4 +51,5 @@ fn run_all(config: &BenchConfig) {
     day!(day_1, config);
     day!(day_2, config);
     day!(day_3, config);
+    day!(day_4, config);
 }

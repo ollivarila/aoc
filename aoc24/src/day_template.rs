@@ -2,8 +2,8 @@ use crate::Solution;
 
 const INPUT: &str = include_str!("../inputs/day2_input.txt");
 
-struct Part1;
-struct Part2;
+pub struct Part1;
+pub struct Part2;
 
 impl Solution for Part1 {
     const FOR: &'static str = todo!();
