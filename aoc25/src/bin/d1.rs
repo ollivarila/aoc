@@ -3,7 +3,7 @@ fn main() {
     solve_pt2();
 }
 
-const INPUT: &str = include_str!("../input/d1.txt");
+const INPUT: &str = include_str!("../../input/d1.txt");
 
 fn solve_pt2() {
     let mut count = 0;
