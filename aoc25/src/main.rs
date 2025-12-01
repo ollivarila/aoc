@@ -14,13 +14,8 @@ fn solve_pt2() {
         let total = line.as_str().parse::<i32>().unwrap();
         let overflow_times = total / 100;
         let n = total % 100;
-        if overflow_times == 0 {
-            assert_eq!(n, total);
-        }
         count += overflow_times;
 
-        assert!(rot < 100 && rot >= 0);
-        assert!(n <= 100 && n >= 0);
         match op {
             'L' => {
                 let after = rot - n;
