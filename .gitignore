@@ -4,3 +4,4 @@ target
 aoc24/inputs
 aoc25/input
 
+*.txt
